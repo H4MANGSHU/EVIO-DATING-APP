@@ -1,0 +1,53 @@
+_format_version: "3.0"
+
+services:
+  - name: unpublished-project
+    host: unpublished-upstream
+    port: 80
+    protocol: http
+    routes:
+      - name: unpublished-route
+        paths:
+          - /payments
+
+  - name: matchmaking-service
+    host: matchmaking-upstream
+    port: 80
+    protocol: http
+    routes:
+      - name: matchmaking-route
+        paths:
+          - /matches
+
+  - name: feed-service
+    host: feed-upstream
+    port: 80
+    protocol: http
+    routes:
+      - name: feed-route
+        paths:
+          - /feed
+
+upstreams:
+  - name: unpublished-upstream
+  - name: matchmaking-upstream
+  - name: feed-upstream
+
+targets:
+  # Unpublished Project instances
+  - upstream: unpublished-upstream
+    target: unpublished-project-1:9074
+  - upstream: unpublished-upstream
+    target: unpublished-project-2:9074
+
+  # Matchmaking instances
+  - upstream: matchmaking-upstream
+    target: matchmaking-service-1:9083
+  - upstream: matchmaking-upstream
+    target: matchmaking-service-2:9083
+
+  # Feed instances
+  - upstream: feed-upstream
+    target: feed-service-1:8093
+  - upstream: feed-upstream
+    target: feed-service-2:8093
